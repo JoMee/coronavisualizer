@@ -20,14 +20,25 @@ class read_Csv {
   Future<List<List>> getDataAsLists() async{
     var bytes = await rootBundle.loadString(fileName);
 
-    List<List> listData;
-    for(int i = 1; i<bytes.split("\n").length; i++){
-      List l;
-      print(bytes.split("\n")[i].split(",").length);
-      for(int j = 4; j<bytes.split("\n")[i].split(",").length; j++){
-        l.add(bytes.split("\n")[i].split(",")[j]);
+    List<List> listData = new List<List>(bytes.split("\n").length);
 
+    for(int i = 0; i<listData.length; i++){
+      String currString = bytes.split("\n")[i];
+      List l = new List(currString.split(",").length);
+      for(int j = 0; j<currString.split(",").length; j++){
+
+        if(currString.split(",").length == 62){
+          if(j == 0){
+            l[j] = currString.split(",")[j] + currString.split(",")[j+1];
+          }else{
+
+            l[j] = bytes.split("\n")[i].split(",")[j+1];
+          }
+        }else{
+          l[j] = currString.split(",")[j];
+        }
       }
+      listData[i] = l;
     }
 
     return listData;

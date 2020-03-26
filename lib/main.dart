@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutterapp/widgets/BarChartWidget.dart';
 import 'util/read_csv.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 void main() {
   runApp(MyApp());
@@ -32,7 +31,7 @@ class AppScreenState extends State<AppScreen>{
   @override
   void initState() {
     super.initState();
-    data = reader.getData();
+    listData = reader.getDataAsLists();
     //listData = reader.getDataAsLists();
   }
   @override
@@ -42,55 +41,11 @@ class AppScreenState extends State<AppScreen>{
         title: const Text('Welcome to Flutter'),
       ),
       body: Center(
-        child: FutureBuilder<String>(
-          future: data,
+        child: FutureBuilder<List<List>>(
+          future: listData,
           builder: (BuildContext context, snapshot){
-
-            List<List> listData = new List<List>(snapshot.data.split("\n").length);
-
-            for(int i = 0; i<listData.length; i++){
-              String currString = snapshot.data.split("\n")[i];
-              List l = new List(currString.split(",").length);
-              for(int j = 0; j<currString.split(",").length; j++){
-
-                if(currString.split(",").length == 62){
-                  if(j == 0){
-                    l[j] = currString.split(",")[j] + currString.split(",")[j+1];
-                  }else{
-
-                    l[j] = snapshot.data.split("\n")[i].split(",")[j+1];
-                  }
-                }else{
-                  l[j] = currString.split(",")[j];
-                }
-              }
-              listData[i] = l;
-            }
-            String country = "Italy";
-            int index = 5;
-
-            List<BarData> dataInPlot = new List(listData[index].length-4);
-
-            for(int i = 4; i<dataInPlot.length+4; i++){
-              dataInPlot[i-4] = new BarData(int.parse(listData[index][i]), listData[0][i]);
-            }
-
-            print(dataInPlot);
-            var series = [
-              new charts.Series(
-                  id: 'confirmed',
-                  data: dataInPlot,
-                  domainFn: (BarData bard, _)=>bard.date,
-                  measureFn: (BarData bard, _)=>bard.num,
-              )
-            ];
-            var chart = new charts.BarChart(
-              series,
-              animate: true,
-            );
-            
             if(snapshot.hasData) {
-              return chart;
+              return new BarChartWidget(snapshot.data);
             }else return CircularProgressIndicator();
           },
         ),
@@ -98,9 +53,5 @@ class AppScreenState extends State<AppScreen>{
     );
   }
 }
-class BarData{
-  int num;
-  String date;
-  BarData(this.num,this.date);
-}
+
 
