@@ -42,6 +42,10 @@ class BarChartWidget extends StatelessWidget{
     var chart = new charts.BarChart(
       series,
       animate: true,
+      domainAxis: new charts.OrdinalAxisSpec(
+        showAxisLine: true,
+        renderSpec: charts.NoneRenderSpec(),
+      ),
     );
     return chart;
   }
