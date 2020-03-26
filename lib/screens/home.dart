@@ -14,6 +14,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool _isTyping = false;
+  FocusNode researchNode;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -42,6 +43,7 @@ class _HomeState extends State<Home> {
             child: TextField(
               controller: _textController,
               onSubmitted: _handleSubmitted,
+              focusNode: researchNode,
             )
           )
         ]),
@@ -49,9 +51,7 @@ class _HomeState extends State<Home> {
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.search),
           onPressed: () {
-            setState(() {
-              _isTyping = true;
-            });
+            researchNode.requestFocus();
           },
           heroTag: "btn1",
         ),
@@ -81,6 +81,12 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     listenForCovid(country);
+    researchNode = FocusNode();
+  }
+  @override
+  void dispose() {
+    researchNode.dispose();
+    super.dispose();
   }
 
   void listenForCovid(String country) async {
