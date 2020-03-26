@@ -8,13 +8,15 @@ final filename = 'assets/data/time_series_19-covid-Confirmed_archived_0325.csv';
 read_Csv reader = new read_Csv(filename);
 
 class AppScreen extends StatefulWidget{
+  final String country;
+  const AppScreen(this.country);
+
   @override
   State<StatefulWidget> createState() => new AppScreenState();
 }
 class AppScreenState extends State<AppScreen>{
   Future<String> data;
   Future<List<List>> listData;
-
   @override
   void initState() {
     super.initState();
@@ -25,14 +27,14 @@ class AppScreenState extends State<AppScreen>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome to Flutter'),
+        title: Text('Corona History in '+ widget.country),
       ),
       body: Center(
         child: FutureBuilder<List<List>>(
           future: listData,
           builder: (BuildContext context, snapshot){
             if(snapshot.hasData) {
-              return new BarChartWidget(snapshot.data,"China");
+              return new BarChartWidget(snapshot.data, widget.country);
             }else return CircularProgressIndicator();
           },
         ),
