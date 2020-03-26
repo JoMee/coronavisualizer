@@ -32,7 +32,7 @@ class AppScreenState extends State<AppScreen>{
           future: listData,
           builder: (BuildContext context, snapshot){
             if(snapshot.hasData) {
-              return new BarChartWidget(snapshot.data);
+              return new BarChartWidget(snapshot.data,"China");
             }else return CircularProgressIndicator();
           },
         ),

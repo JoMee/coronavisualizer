@@ -6,16 +6,25 @@ import 'package:flutter/material.dart';
 
 class BarChartWidget extends StatelessWidget{
   List listData;
-
-  BarChartWidget(List list){this.listData = list;}
+  String country;
+  BarChartWidget(List list,String country){
+    this.country = country;
+    this.listData = list;
+  }
 
   @override
   Widget build(BuildContext context) {
 
 
 
-    String country = "Italy";
-    int index = 5;
+    int index = 1;
+    for(int i = 1; i<listData.length; i++){
+      if(listData[i][1] == country){
+        index = i;
+        break;
+      }
+    }
+
 
     List<BarData> dataInPlot = new List(listData[index].length-4);
 
